@@ -3,21 +3,28 @@ Router.configure({
   loadingTemplate: 'loading'
 });
 
-//Main Page
-Router.route('/', {name: 'home'});
-//Login Page
-Router.route('/login');
+Router.map(function() {
+	this.route('home', {path: '/'});
+	this.route('login');
+});
 
 //Load GoogleMaps only on Main Page
-Router.onBeforeAction(function() {
-	if (!Session.get("user")) {
-		window.location.replace("/login");
-	} else {
-		GoogleMaps.load();
-  		this.next();
-  	}
-}, {only: ['/']});
+var mustBeSignedIn = function(pause) {
+  if (!(Meteor.user())) {
+    Router.go('login');
+  }
+  this.next();
+};
 
+var goToDashboard = function(pause) {
+  if (Meteor.user()) {
+    Router.go('home');
+  }
+  this.next();
+};
+
+Router.onBeforeAction(mustBeSignedIn, {only: ['home']});
+Router.onBeforeAction(goToDashboard, {only: ['login']});
 
 // MainController = RouteController.extend({
 //   action: function() {
