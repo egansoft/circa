@@ -59,5 +59,11 @@ Template.home.onCreated(function() {
 	});
 });
 Template.home.events({
-
+	"click #modal-button": function() {
+		$('#myModal').modal();
+	},
+	"submit #myModal": function(event) {
+		event.preventDefault();
+		console.log("hi");
+	}
 });
