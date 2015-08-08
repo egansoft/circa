@@ -5,6 +5,9 @@
       <h1>TFTI</h1>
           {{> loginButtons}}
           <p>Maps be here</p>
+          <div class="map-container">
+            {{> googleMap name="CampusMap" options=CampusMapOptions}}
+          </div>
       </div>
     </div>
 </template>
