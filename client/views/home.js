@@ -1,4 +1,5 @@
-
+//Marker images
+Baseball = 'baseball.png';
 
 Template.home.helpers({
   CampusMapOptions: function() {
@@ -30,7 +31,7 @@ Template.home.onCreated(function() {
 					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(document.lat, document.lng),
 					map: map.instance,
-					label: 'M',
+					icon: Baseball,
 					id: document._id
 				});
 				google.maps.event.addListener(marker, 'dragend', function(event) {
