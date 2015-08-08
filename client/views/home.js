@@ -2,9 +2,10 @@
 
 Template.home.helpers({
   CampusMapOptions: function() {
-  	if (GoogleMaps.loaded()) {
+    var loc = Geolocation.latLng()
+  	if (GoogleMaps.loaded() && loc) {
   		return {
-  			center: new google.maps.LatLng(-37.8136, 144.9631),
+  			center: new google.maps.LatLng(loc.lat, loc.lng),
   			zoom: 8
   		};
   	}
@@ -29,6 +30,7 @@ Template.home.onCreated(function() {
 					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(document.lat, document.lng),
 					map: map.instance,
+					label: 'M',
 					id: document._id
 				});
 				google.maps.event.addListener(marker, 'dragend', function(event) {
@@ -55,7 +57,6 @@ Template.home.onCreated(function() {
 		});
 	});
 });
-
 Template.home.events({
-  
+
 });
