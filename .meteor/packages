@@ -1,3 +1,6 @@
 standard-app-packages
 iron:router
 twbs:bootstrap
+insecure
+u2622:persistent-session
+autopublish
