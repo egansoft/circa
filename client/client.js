@@ -1,5 +1,3 @@
-if (Meteor.isClient) {
-	Meteor.startup(function() {
-		GoogleMaps.load();
-	});
-}
+Meteor.startup(function() {
+	GoogleMaps.load();
+});

@@ -8,7 +8,6 @@ Router.map(function() {
 	this.route('login');
 });
 
-//Load GoogleMaps only on Main Page
 var mustBeSignedIn = function(pause) {
   if (!(Meteor.user())) {
     Router.go('login');
