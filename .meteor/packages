@@ -4,3 +4,5 @@ twbs:bootstrap
 insecure
 u2622:persistent-session
 autopublish
+accounts-facebook
+mdg:geolocation
