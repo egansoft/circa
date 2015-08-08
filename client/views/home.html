@@ -1,13 +1,13 @@
 <template name="home">
+
   <div class="container">
     <div class="jumbotron">
       <h1>TFTI Meteor</h1>
-      
-      <button class="btn btn-default" type="button">Try It</button>
-      {{#if myAppVariable}}
-      <h3>{{myAppVariable}}</h3>
-      {{/if}}
-      {{> loginButtons}}
+        <div class="container">
+        <div class="jumbotron">
+            <h1>TFTI</h1>
+            {{> loginButtons}}
+            <p>Maps be here</p>
+        </div>
     </div>
-  </div>
 </template>
