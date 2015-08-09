@@ -4,7 +4,7 @@ var eventLat;
 var eventLng;
 
 var shape = {
-    coords: [0,0,32,32],
+    coord: [-32,-32,100,100],
     type: 'rect'
 }
 
@@ -96,7 +96,9 @@ Template.home.onCreated(function() {
 						if ($('#' + marker.id + ' .attending li').length < 1) {
 							var event = Events.findOne(marker.id);
 							event.attending.forEach(function(entry) {
-								$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + entry[0] + "/picture/?type=small></li>");
+								$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
+                                    "<img src=http://graph.facebook.com/" + entry[0] +
+                                    "/picture/?type=small class=\"img-responsive\"></div></li>");
 							});
 						}
 					}
@@ -124,7 +126,7 @@ Template.home.onCreated(function() {
 			changed: function(newDocument, oldDocument) {
 				events[newDocument._id].setPosition({lat: newDocument.lat, lng: newDocument.lng});
 				var att = $('#' + newDocument._id +' .event-capacity-info-window').text();
-				
+
 				var capacity = att.substring(att.indexOf(' '));
 				att2 = parseInt(att.substring(0, att.indexOf(' ')), 10) + 1;
 				$('#' + newDocument._id +' .event-capacity-info-window').text(att2.toString() + capacity);
