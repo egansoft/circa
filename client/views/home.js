@@ -65,7 +65,7 @@ Template.home.onCreated(function() {
 
                 var icon = that.categories.icon(document.category)
 				var marker = new google.maps.Marker({
-					draggable: true,
+					draggable: false,
 					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(document.lat, document.lng),
 					map: map.instance,
@@ -117,6 +117,14 @@ Template.home.onCreated(function() {
 							$('#rsvp-notice').text("You're going!");
 							$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
 							Events.update(marker.id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
+						}
+					}
+				);
+
+				google.maps.event.addListener(marker, 'rightclick',
+					function(event) {
+						if (document.host == Meteor.user()._id) {
+							Events.remove(marker.id);
 						}
 					}
 				);
@@ -174,5 +182,9 @@ Template.CreateEventModal.events({
 		});
 		Modal.hide('CreateEventModal');
 		$('#create-form').trigger('reset');
+	},
+	"submit #create-event": function(event){
+		event.preventDefault();
+		$("#create-event-button").click();
 	}
 });
