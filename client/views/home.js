@@ -2,10 +2,13 @@ var that = this
 
 var eventLat;
 var eventLng;
+
 var shape = {
     coords: [0,0,32,32],
     type: 'rect'
 }
+
+var loc;
 
 var rad = function(x) {
   return x * Math.PI / 180;
@@ -20,12 +23,12 @@ var getDistance = function(lat1, lng1, lat2, lng2) {
     Math.sin(dLong / 2) * Math.sin(dLong / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
-  return d; // returns the distance in meter
+  return Math.floor(d); // returns the distance in meter
 };
 
 Template.home.helpers({
   CampusMapOptions: function() {
-    var loc = Geolocation.latLng()
+    loc = Geolocation.latLng()
   	if (GoogleMaps.loaded() && loc) {
   		return {
   			center: new google.maps.LatLng(loc.lat, loc.lng),
@@ -81,6 +84,7 @@ Template.home.onCreated(function() {
 						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
 						      '<div id=' + marker.id + '>'+
 						      '<p class="event-time-info-window"><strong>' + document.startTime + ' - ' + document.endTime + '</strong></p>' +
+						      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
 						      '<p><span class="event-capacity-info-window">'  + document.attending.length + '/' + document.capacity + '</span> people attending</p>' +
 						      '<p>' + document.description + '</p>'+
 						      '<ul class="attending"></ul>' +
