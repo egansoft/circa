@@ -105,60 +105,72 @@ Template.home.onCreated(function() {
                         shape: shape,
     					id: document._id
     				});
+
+                    // set object value for toggling
+                    marker.opened = false;
+                    marker.info = {};
+
     				// google.maps.event.addListener(marker, 'dragend', function(event) {
     				// 	Events.update(marker.id, {$set : {lat: event.latLng.lat(), lng: event.latLng.lng()}});
     				// });
 
     				google.maps.event.addListener(marker, DeviceListeners['open'],
     					function(){
-    						infowindow = new google.maps.InfoWindow({
-    							content: '<div class="content">'+
-    						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
-    						      '<div id=' + marker.id + '>'+
-    							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
-    							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
-    							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
-    							      '<ul class="attending"></ul>' +
-    							      '<p id="rsvp-notice"></p>'+
-    							      '<button data=' + marker.id + ' type="button" class="btn btn-primary rsvp-button">Let\'s Go!</button>' +
-    						      '</div>'+
-    						      '</div>',
-                                 disableAutoPan: true
-    						});
-    						google.maps.event.addListener(infowindow, 'domready', function() {
-							    // document.id("map-form").addEvent("submit", function(e) {
-							    //     e.stop();
-							    //     console.log("hi!");
-							    // });
-							    $('.rsvp-button').click(function() {
-									try {
-										var event_id = $(this).attr('data');
+                            if (marker.opened) {
+                                marker.info.close();
+                                marker.opened = false;
+                            } else {
+        						infowindow = new google.maps.InfoWindow({
+        							content: '<div class="content">'+
+        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
+        						      '<div id=' + marker.id + '>'+
+        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
+        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
+        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
+        							      '<ul class="attending"></ul>' +
+        							      '<p id="rsvp-notice"></p>'+
+        							      '<button data=' + marker.id + ' type="button" class="btn btn-primary rsvp-button">Let\'s Go!</button>' +
+        						      '</div>'+
+        						      '</div>',
+                                     disableAutoPan: true
+        						});
+        						google.maps.event.addListener(infowindow, 'domready', function() {
+    							    // document.id("map-form").addEvent("submit", function(e) {
+    							    //     e.stop();
+    							    //     console.log("hi!");
+    							    // });
+    							    $('.rsvp-button').click(function() {
+    									try {
+    										var event_id = $(this).attr('data');
 
-										console.log(event_id);
+    										console.log(event_id);
 
-										var ev = Events.findOne(event_id);
-										console.log(ev);
-										if (ev.host != Meteor.user()._id && $.inArray(event_id, Meteor.user().attending) == -1) {
-											$('#rsvp-notice').text("You're going!");
-											$(event.target).closest('ul').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
-											Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": event_id}});
-											Events.update(ev._id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
-											console.log(Meteor.user().profile);
-										}
-									} catch (err) {
-										console.log("we have an error", err);
-									}
-								});
-							});
-    						infowindow.open(GoogleMaps.maps.CampusMap.instance, marker); //TODO images only load on 2nd click?
-    						if ($('#' + marker.id + ' .attending li').length < 1) {
-    							var event = Events.findOne(marker.id);
-    							event.attending.forEach(function(entry) {
-    								$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
-                                        "<img src=http://graph.facebook.com/" + entry[0] +
-                                        "/picture/?type=small class=\"img-responsive\"></div></li>");
+    										var ev = Events.findOne(event_id);
+    										console.log(ev);
+    										if (ev.host != Meteor.user()._id && $.inArray(event_id, Meteor.user().attending) == -1) {
+    											$('#rsvp-notice').text("You're going!");
+    											$(event.target).closest('ul').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
+    											Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": event_id}});
+    											Events.update(ev._id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
+    											console.log(Meteor.user().profile);
+    										}
+    									} catch (err) {
+    										console.log("we have an error", err);
+    									}
+    								});
     							});
-    						}
+                                marker.info = infowindow;
+                                marker.opened = true;
+        						marker.info.open(GoogleMaps.maps.CampusMap.instance, marker); //TODO images only load on 2nd click?
+        						if ($('#' + marker.id + ' .attending li').length < 1) {
+        							var event = Events.findOne(marker.id);
+        							event.attending.forEach(function(entry) {
+        								$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
+                                            "<img src=http://graph.facebook.com/" + entry[0] +
+                                            "/picture/?type=small class=\"img-responsive\"></div></li>");
+        							});
+        						}
+                            }
     					}
     				);
 
