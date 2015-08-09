@@ -89,7 +89,7 @@ Template.home.onCreated(function() {
 						if ($('#' + marker.id + ' .attending li').length < 1) {
 							var event = Events.findOne(marker.id);
 							event.attending.forEach(function(entry) {
-								$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + entry + "/picture/?type=small></li>");
+								$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + entry[0] + "/picture/?type=small></li>");
 							});
 						}
 					}
@@ -107,7 +107,7 @@ Template.home.onCreated(function() {
 						if (document.host != Meteor.user()._id) {
 							$('#rsvp-notice').text("You're going!");
 							$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
-							Events.update(marker.id, {$addToSet: {attending: Meteor.user().services.facebook.id}});
+							Events.update(marker.id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
 						}
 					}
 				);
@@ -126,7 +126,7 @@ Template.home.onCreated(function() {
 				$('#' + newDocument._id +' .event-capacity-info-window').text(att2.toString() + capacity);
 				if (newDocument.host == Meteor.user()._id) {
 					var newMember = newDocument.attending[newDocument.attending.length-1]
-					Flash.info(newMember + ' joined your event ' + newDocument.name)
+					Flash.info(newMember[1] + ' joined your event: ' + newDocument.name)
 				}
 			},
 			removed: function(oldDocument) {
@@ -169,7 +169,7 @@ Template.CreateEventModal.events({
 			endTime: eventEndTime,
 			capacity: eventCapacity,
 			category: eventCategory,
-			attending: [Meteor.user().services.facebook.id],
+			attending: [[Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]],
 			host: Meteor.user()._id
 		});
 		Modal.hide('CreateEventModal');
