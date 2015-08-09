@@ -12,3 +12,4 @@ peppelg:bootstrap-3-modal
 tsega:bootstrap3-datetimepicker
 reactive-var
 naxio:flash
+momentjs:moment

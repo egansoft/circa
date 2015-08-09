@@ -78,10 +78,9 @@ Template.home.onCreated(function() {
 							content: '<div class="content">'+
 						      '<h1 class="eventHeading">' + document.name + '--' + document.category + '</h1>'+
 						      '<div id=' + marker.id + '>'+
-						      '<p class="event-time-info-window"><strong>' + document.startTime + ' - ' + document.endTime + '</strong></p>' +
+						      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
 						      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
-						      '<p><span class="event-capacity-info-window">'  + document.attending.length + '/' + document.capacity + '</span> people attending</p>' +
-						      '<p>' + document.description + '</p>'+
+						      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
 						      '<ul class="attending"></ul>' +
 						      '<p id="rsvp-notice"></p>'+
 						      '</div>'+
@@ -119,12 +118,9 @@ Template.home.onCreated(function() {
 			changed: function(newDocument, oldDocument) {
 				events[newDocument._id].setPosition({lat: newDocument.lat, lng: newDocument.lng});
 				var att = $('#' + newDocument._id +' .event-capacity-info-window').text();
-				console.log("HELLO");
-				console.log('the string is' + att);
-				var capacity = att.substring(att.indexOf('/'));
-				console.log('cap is ' + capacity);
-				att2 = parseInt(att.substring(0, att.indexOf('/')), 10) + 1;
-				console.log('att2 is ' + att2);
+				
+				var capacity = att.substring(att.indexOf(' '));
+				att2 = parseInt(att.substring(0, att.indexOf(' ')), 10) + 1;
 				$('#' + newDocument._id +' .event-capacity-info-window').text(att2.toString() + capacity);
 				if (newDocument.host == Meteor.user()._id) {
 					var newMember = newDocument.attending[newDocument.attending.length-1]
@@ -157,19 +153,14 @@ Template.CreateEventModal.events({
 		event.preventDefault();
 		var eventName = $('#event-name').val();
 		var eventDescription = $('#event-description').val();
-		var eventStartTime = $('#event-time-start').val();
-		var eventEndTime = $('#event-time-end').val();
-		var eventCapacity = $('#event-capacity').val();
 		var eventCategory = $('#event-category').val();
 		//Insert dat yo
+		var date = new Date();
 		Events.insert({
 			lat: eventLat,
 			lng: eventLng,
 			name: eventName,
-			description: eventDescription,
-			startTime: eventStartTime,
-			endTime: eventEndTime,
-			capacity: eventCapacity,
+			startTime: date,
 			category: eventCategory,
 			attending: [[Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]],
 			host: Meteor.user()._id
