@@ -107,3 +107,11 @@ button {
     z-index:10000000; /* damn straight mutha fucka */
     right:5px;
 }
+
+.dankness {
+    height:50px;
+
+}
+.dankness img {
+    height:100%;
+}
