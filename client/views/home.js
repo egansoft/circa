@@ -2,6 +2,12 @@ var that = this
 
 var eventLat;
 var eventLng;
+
+var shape = {
+    coords: [0,0,32,32],
+    type: 'rect'
+}
+
 var loc;
 
 var rad = function(x) {
@@ -57,15 +63,14 @@ Template.home.onCreated(function() {
 				if(!that.filters[document.category])
 					return
 
-                var icon = _.find(that.categories, function(category) {
-                    return category.name == document.category
-                }).icon
+                var icon = that.categories.icon(document.category)
 				var marker = new google.maps.Marker({
 					draggable: true,
 					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(document.lat, document.lng),
 					map: map.instance,
                     icon: icon,
+                    shape: shape,
 					id: document._id
 				});
 				// google.maps.event.addListener(marker, 'dragend', function(event) {
@@ -76,7 +81,7 @@ Template.home.onCreated(function() {
 					function(){
 						infowindow = new google.maps.InfoWindow({
 							content: '<div class="content">'+
-						      '<h1 class="eventHeading">' + document.name + '--' + document.category + '</h1>'+
+						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
 						      '<div id=' + marker.id + '>'+
 						      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
 						      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
@@ -84,7 +89,8 @@ Template.home.onCreated(function() {
 						      '<ul class="attending"></ul>' +
 						      '<p id="rsvp-notice"></p>'+
 						      '</div>'+
-						      '</div>'
+						      '</div>',
+                             disableAutoPan: true
 						});
 						infowindow.open(GoogleMaps.maps.CampusMap.instance, marker);
 						if ($('#' + marker.id + ' .attending li').length < 1) {
@@ -124,7 +130,8 @@ Template.home.onCreated(function() {
 				$('#' + newDocument._id +' .event-capacity-info-window').text(att2.toString() + capacity);
 				if (newDocument.host == Meteor.user()._id) {
 					var newMember = newDocument.attending[newDocument.attending.length-1]
-					Flash.info(newMember[1] + ' joined your event: ' + newDocument.name)
+                    var img = '<img src="http://graph.facebook.com/' + newMember[0] + '/picture/?type=small" /> '
+					Flash.info(img + newMember[1] + ' joined your event: ' + newDocument.name)
 				}
 			},
 			removed: function(oldDocument) {
