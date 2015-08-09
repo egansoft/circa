@@ -89,3 +89,13 @@ button {
 .content {
   color: #000;
 }
+
+.attending {
+    padding:0;
+}
+.attending li {
+    list-style-type:none;
+    display:inline-block;
+}
+.attending li img {
+}
