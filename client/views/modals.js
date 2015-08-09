@@ -39,12 +39,29 @@ Template.eventList.helpers({
         return moment(param.hash.time).fromNow()
     },
     img: function(param){
-        console.log(param)
         return param.hash.thing[0]
     },
     emoji: function(){
         return _.map(that.emoji, function(val, key){
             return {name: key, icon: val.icon, feel: val.feel}
         })
+    },
+    getEvent: function(param) {
+        return Template.parentData()._id
+    },
+    com: function(param) {
+        var some = Events.findOne(param.hash.event)
+        return some.emoji
+    },
+    comIcon: function(param) {
+        return that.emoji[param.hash.name].icon
+    }
+})
+
+Template.eventList.events({
+    'click .dank': function(a) {
+        console.log(a)
+        console.log($(a.target).attr('data-name'), $(a.target).attr('data-event'))
+        Events.update($(a.target).attr('data-event'), {'$push': {emoji: $(a.target).attr('data-name')}})
     }
 })

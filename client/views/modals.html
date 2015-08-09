@@ -157,7 +157,13 @@
                 </ul>
                 <ul class="emoji">
                     {{#each emoji}}
-                        <img src="{{this.icon}}" />
+                        <img src="{{this.icon}}" data-name="{{this.name}}" data-event="{{getEvent me=this}}" class="dank" />
+                    {{/each}}
+                </ul>
+                <hr />
+                <ul class="com">
+                    {{#each com event=this._id}}
+                        <img src="{{comIcon name=this}}" />
                     {{/each}}
                 </ul>
             </div>
