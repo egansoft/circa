@@ -245,7 +245,8 @@ Template.home.onCreated(function() {
     				if (newDocument.host == Meteor.user()._id) {
     					var newMember = newDocument.attending[newDocument.attending.length-1]
                         var img = '<img src="http://graph.facebook.com/' + newMember[0] + '/picture/?type=small" /> '
-    					Flash.info(img + newMember[1] + ' joined your event: ' + newDocument.name)
+                        if(newDocument.attending.length > oldDocument.attending.length)
+    					     Flash.info(img + new  Member[1] + ' joined your event: ' + newDocument.name)
     				}
     			},
     			removed: function(oldDocument) {
