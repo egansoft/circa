@@ -1,15 +1,7 @@
-//Marker images
-Icons = {
-	"Social" : "img/icons/drinks.png",
-	"Study" : "img/icons/pencil.png",
-	"Exchange" : "img/icons/heart.png", //TODO change
-	"Food" : "img/icons/pizza.png",
-	"Sports" : "img/icons/basketball.png",
-}
+var that = this
+
 var eventLat;
 var eventLng;
-
-
 
 Template.home.helpers({
   CampusMapOptions: function() {
@@ -21,6 +13,7 @@ Template.home.helpers({
   		};
   	}
   }
+
 });
 
 Template.home.onCreated(function() {
@@ -38,12 +31,19 @@ Template.home.onCreated(function() {
 
 		Events.find().observe({
 			added: function(document) {
+				console.log(that.filters[document.category])
+				if(!that.filters[document.category])
+					return
+
+                var icon = _.find(that.categories, function(category) {
+                    return category.name == document.category
+                }).icon
 				var marker = new google.maps.Marker({
 					draggable: true,
 					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(document.lat, document.lng),
 					map: map.instance,
-					icon: Icons[document.category],
+                    icon: icon,
 					id: document._id
 				});
 				google.maps.event.addListener(marker, 'dragend', function(event) {
