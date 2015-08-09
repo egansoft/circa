@@ -49,7 +49,7 @@ Template.home.onCreated(function() {
 				google.maps.event.addListener(marker, 'dragend', function(event) {
 					Events.update(marker.id, {$set : {lat: event.latLng.lat(), lng: event.latLng.lng()}});
 				});
-				google.maps.event.addListener(marker, 'rightclick', 
+				google.maps.event.addListener(marker, 'rightclick',
 					function(event) {
 						Events.remove(marker.id);
 					}
