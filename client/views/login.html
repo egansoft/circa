@@ -1,9 +1,11 @@
-    <template name="login">
+<template name="login">
     <div class="container">
         <div class="jumbotron">
-            <center><h1>C I R C A</h1></center> 
-            <center><p>Share life at every turn.</p></center> 
-            <center><p>{{> loginButtons}}</p></center>
+            <center><h1>C I R C A</h1></center>
+            <center><p>Share life at every turn.</p></center>
+            {{#spinner type='wave' visible=isLoading}}
+                <center><p>{{> loginButtons}}</p></center>
+            {{/spinner}}
         </div>
     </div>
 </template>
