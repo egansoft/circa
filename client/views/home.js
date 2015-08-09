@@ -230,11 +230,10 @@ Template.home.onCreated(function() {
     				var attendees = $('#' + newDocument._id +' .event-capacity-info-window').text();
     				attendees = parseInt(attendees, 10) + 1;
     				$('#' + newDocument._id +' .event-capacity-info-window').text(attendees.toString());
-    				if (newDocument.host == Meteor.user()._id) {
-    					var newMember = newDocument.attending[newDocument.attending.length-1]
-                        var img = '<img src="http://graph.facebook.com/' + newMember[0] + '/picture/?type=small" /> '
-    					Flash.info(img + newMember[1] + ' joined your event: ' + newDocument.name)
-    				}
+                    
+					var newMember = newDocument.attending[newDocument.attending.length-1]
+                    var img = '<img src="http://graph.facebook.com/' + newMember[0] + '/picture/?type=small" /> '
+					Flash.info(img + newMember[1] + ' joined your event: ' + newDocument.name)
     			},
     			removed: function(oldDocument) {
     				events[oldDocument._id].setMap(null);

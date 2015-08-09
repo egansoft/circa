@@ -17,24 +17,34 @@ Template.filterChecks.helpers({
 
 Template.filterChecks.events({
     'click .filterCheck': function(e) {
-        // var new_filter = Session.get('filter')
-        // console.log(this.name);
-        // if (!$.inArray(this.name, Session.get('filter'))) {
-        //     console.log("in array");
-        //     var index = new_filter.indexOf(this.name);
-        //     new_filter.splice(index, 1);
-        //     Session.set('filter', new_filter);
-        //     console.log(Session.get('filter'));
-        // } else {
-        //     console.log("not in array");
-        //     new_filter.push(this.name);
-        //     console.log(new_filter);
-        //     Session.set('filter', new_filter);
-        //     console.log(Session.get('filter'));
-        // }
-        // console.log(that.filterQuery());
         that.filters[e.target.value] = e.target.checked
         that.shownCategories.set(that.filters.get())
         console.log(that.shownCategories.get())
+    }
+})
+
+Template.eventList.helpers({
+    events: function() {
+        var events = Events.find().fetch()
+        return _.filter(events, function(event) {
+            return _.find(event.attending, function(person) {
+                return person[0] == Meteor.user().services.facebook.id
+            })
+        })
+    },
+    icon: function(param) {
+        return that.categories.icon(param.hash.category)
+    },
+    time: function(param) {
+        return moment(param.hash.time).fromNow()
+    },
+    img: function(param){
+        console.log(param)
+        return param.hash.thing[0]
+    },
+    emoji: function(){
+        return _.map(that.emoji, function(val, key){
+            return {name: key, icon: val.icon, feel: val.feel}
+        })
     }
 })

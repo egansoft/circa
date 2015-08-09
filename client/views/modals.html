@@ -117,3 +117,50 @@
     </div>
   </div>
 </template>
+
+<template name="eventsModal">
+  <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">My Events</h4>
+        </div>
+        <div class="modal-body">
+          <form id="filter-events">
+            {{> eventList}}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" form="filter-form" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="eventList">
+    {{#each events}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><img src="{{icon category=this.category}}" /> {{this.name}}</h3>
+            </div>
+            <div class="panel-body">
+                <p class="event-time-info-window"><strong>{{time time=this.startTime}}</strong> |
+                <span class="event-capacity-info-window">{{this.attending.length}} </span> people attending</p>
+                <ul class="attending">
+                    {{#each this.attending}}
+                        <li><div class="dankness">
+                            <img src="http://graph.facebook.com/{{img thing=this}}/picture/?type=small" class="img-responsive" />
+                        </div></li>
+                    {{/each}}
+                </ul>
+                <ul class="emoji">
+                    {{#each emoji}}
+                        <img src="{{this.icon}}" />
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    {{/each}}
+</template>
