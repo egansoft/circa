@@ -67,7 +67,8 @@ Template.home.onCreated(function() {
 						});
 						infowindow.open(GoogleMaps.maps.CampusMap.instance, marker);
 						if ($('#' + marker.id + ' .attending li').length < 1) {
-							document.attending.forEach(function(entry) {
+							var event = Events.findOne(marker.id);
+							event.attending.forEach(function(entry) {
 								$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + entry + "/picture/?type=small></li>");
 							});
 						}
@@ -76,6 +77,7 @@ Template.home.onCreated(function() {
 
 				google.maps.event.addListener(marker, 'mouseout',
 					function(){
+						$('#' + marker.id + ' .attending').empty();
 						infowindow.close(GoogleMaps.maps.CampusMap.instance, marker);
 					}
 				);
@@ -84,7 +86,7 @@ Template.home.onCreated(function() {
 					function(event) {
 						if (document.host != Meteor.user()._id) {
 							$('#rsvp-notice').text("You're going!");
-							$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=large></li>");
+							$('#' + marker.id + ' .attending').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
 							Events.update(marker.id, {$addToSet: {attending: Meteor.user().services.facebook.id}});
 						}
 					}
