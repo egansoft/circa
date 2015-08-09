@@ -4,7 +4,7 @@ Icons = {
 	"Study" : "img/icons/pencil.png",
 	"Exchange" : "img/icons/heart.png", //TODO change
 	"Food" : "img/icons/pizza.png",
-	"Sports" : "img/icons/basketbal.png",
+	"Sports" : "img/icons/basketball.png",
 }
 var eventLat;
 var eventLng;
@@ -72,7 +72,7 @@ Template.home.onCreated(function() {
 });
 Template.home.events({
 	// "click #modal-button": function() {
-	// 	Modal.show('CreateEventModal');	
+	// 	Modal.show('CreateEventModal');
 	// },
 });
 
@@ -92,7 +92,7 @@ Template.CreateEventModal.events({
 		var eventCategory = $('#event-category').val();
 		//Insert dat yo
 		Events.insert({
-			lat: eventLat, 
+			lat: eventLat,
 			lng: eventLng,
 			name: eventName,
 			description: eventDescription,
@@ -105,4 +105,3 @@ Template.CreateEventModal.events({
 		$('#create-form').trigger('reset');
 	}
 });
-
