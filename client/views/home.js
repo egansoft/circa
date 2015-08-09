@@ -1,5 +1,15 @@
 //Marker images
-Baseball = 'baseball.png';
+Icons = {
+	"Social" : "img/icons/drinks.png",
+	"Study" : "img/icons/pencil.png",
+	"Exchange" : "img/icons/heart.png", //TODO change
+	"Food" : "img/icons/pizza.png",
+	"Sports" : "img/icons/basketbal.png",
+}
+var eventLat;
+var eventLng;
+
+
 
 Template.home.helpers({
   CampusMapOptions: function() {
@@ -18,7 +28,9 @@ Template.home.onCreated(function() {
 		google.maps.event.addListener(map.instance, 'dblclick',
 			function(event) {
 				console.log(event);
-				Events.insert({lat: event.latLng.lat(), lng: event.latLng.lng()});
+				eventLat = event.latLng.lat();
+				eventLng = event.latLng.lng();
+				Modal.show('CreateEventModal');
 			}
 		);
 
@@ -31,7 +43,7 @@ Template.home.onCreated(function() {
 					animation: google.maps.Animation.DROP,
 					position: new google.maps.LatLng(document.lat, document.lng),
 					map: map.instance,
-					icon: Baseball,
+					icon: Icons[document.category],
 					id: document._id
 				});
 				google.maps.event.addListener(marker, 'dragend', function(event) {
@@ -59,5 +71,38 @@ Template.home.onCreated(function() {
 	});
 });
 Template.home.events({
-
+	// "click #modal-button": function() {
+	// 	Modal.show('CreateEventModal');	
+	// },
 });
+
+Template.CreateEventModal.helpers({
+	getCoordinates: function() {
+		return [eventLat, eventLng];
+	}
+});
+Template.CreateEventModal.events({
+	"click #create-event-button": function(event) {
+		event.preventDefault();
+		var eventName = $('#event-name').val();
+		var eventDescription = $('#event-description').val();
+		var eventStartTime = $('#event-time-start').val();
+		var eventEndTime = $('#event-time-end').val();
+		var eventCapacity = $('#event-capacity').val();
+		var eventCategory = $('#event-category').val();
+		//Insert dat yo
+		Events.insert({
+			lat: eventLat, 
+			lng: eventLng,
+			name: eventName,
+			description: eventDescription,
+			startTime: eventStartTime,
+			endTime: eventEndTime,
+			capacity: eventCapacity,
+			category: eventCategory
+		});
+		Modal.hide('CreateEventModal');
+		$('#create-form').trigger('reset');
+	}
+});
+

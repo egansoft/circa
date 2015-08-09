@@ -14,7 +14,9 @@ body {
   height:100%;
 
 }
-
+form {
+  color: #000;
+}
 
 .container {
   width: 960px;
@@ -34,6 +36,10 @@ body {
 }
 h1 {
   line-height: 1;
+}
+
+h4 {
+  color: #000;
 }
 p {
   line-height: 1.4;
@@ -71,4 +77,11 @@ button {
     height:100%;
     padding:0;
     margin-top:50px;
+}
+
+/*Event Modal Styling*/
+.tme-picker form-control {
+  display: inline-block;
+  width: 50%;
+  float: left;
 }
