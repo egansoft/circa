@@ -123,11 +123,9 @@ Template.home.onCreated(function() {
 			},
 			changed: function(newDocument, oldDocument) {
 				events[newDocument._id].setPosition({lat: newDocument.lat, lng: newDocument.lng});
-				var att = $('#' + newDocument._id +' .event-capacity-info-window').text();
-				
-				var capacity = att.substring(att.indexOf(' '));
-				att2 = parseInt(att.substring(0, att.indexOf(' ')), 10) + 1;
-				$('#' + newDocument._id +' .event-capacity-info-window').text(att2.toString() + capacity);
+				var attendees = $('#' + newDocument._id +' .event-capacity-info-window').text();
+				attendees = parseInt(attendees, 10) + 1;
+				$('#' + newDocument._id +' .event-capacity-info-window').text(attendees.toString());
 				if (newDocument.host == Meteor.user()._id) {
 					var newMember = newDocument.attending[newDocument.attending.length-1]
                     var img = '<img src="http://graph.facebook.com/' + newMember[0] + '/picture/?type=small" /> '
