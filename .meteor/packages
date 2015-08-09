@@ -13,3 +13,4 @@ tsega:bootstrap3-datetimepicker
 reactive-var
 naxio:flash
 momentjs:moment
+dispatch:spinner
