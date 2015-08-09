@@ -174,5 +174,9 @@ Template.CreateEventModal.events({
 		});
 		Modal.hide('CreateEventModal');
 		$('#create-form').trigger('reset');
+	},
+	"submit #create-event": function(event){
+		event.preventDefault();
+		$("#create-event-button").click();
 	}
 });
