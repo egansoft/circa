@@ -51,7 +51,7 @@ Template.home.onCreated(function() {
 				// 	Events.update(marker.id, {$set : {lat: event.latLng.lat(), lng: event.latLng.lng()}});
 				// });
 
-				google.maps.event.addListener(marker, 'mouseover', 
+				google.maps.event.addListener(marker, 'mouseover',
 					function(){
 						infowindow = new google.maps.InfoWindow({
 							content: '<div class="content">'+
@@ -99,11 +99,15 @@ Template.home.onCreated(function() {
 				var att = $('#' + newDocument._id +' .event-capacity-info-window').text();
 				console.log("HELLO");
 				console.log('the string is' + att);
-				var capacity = att.substring(att.indexOf('/')); 
+				var capacity = att.substring(att.indexOf('/'));
 				console.log('cap is ' + capacity);
 				att2 = parseInt(att.substring(0, att.indexOf('/')), 10) + 1;
 				console.log('att2 is ' + att2);
 				$('#' + newDocument._id +' .event-capacity-info-window').text(att2.toString() + capacity);
+				if (newDocument.host == Meteor.user()._id) {
+					var newMember = newDocument.attending[newDocument.attending.length-1]
+					Flash.info(newMember + ' joined your event ' + newDocument.name)
+				}
 			},
 			removed: function(oldDocument) {
 				events[oldDocument._id].setMap(null);

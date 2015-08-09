@@ -1,8 +1,10 @@
 <template name="home">
     {{> navbar}}
 
-
     <div class="container-fluid fucka">
+        <div class="flashaMuthaFucka">
+            {{flash}}
+        </div>
         <div class="map-container">
             {{> googleMap name="CampusMap" options=CampusMapOptions}}
         </div>
