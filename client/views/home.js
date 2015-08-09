@@ -57,7 +57,8 @@ Template.home.onCreated(function() {
 		var events = {};
 		var infowindow;
 
-		Events.find().observe({
+		Events.find({time: {$gt : Date.now() - (1000 * 60 * 60)}}).observe({
+		// Events.find({time: {$gt : Date.now() - (10)}}).observe({
 			added: function(document) {
 				console.log(that.filters[document.category])
 				if(!that.filters[document.category])
@@ -176,6 +177,7 @@ Template.CreateEventModal.events({
 			lng: eventLng,
 			name: eventName,
 			startTime: date,
+			time: Date.now(),
 			category: eventCategory,
 			attending: [[Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]],
 			host: Meteor.user()._id
