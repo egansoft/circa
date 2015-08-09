@@ -113,6 +113,33 @@ Template.home.onCreated(function() {
 						      '</div>',
                              disableAutoPan: true
 						});
+
+						google.maps.event.addListener(infowindow, 'domready', function() {
+						    // document.id("map-form").addEvent("submit", function(e) {
+						    //     e.stop();
+						    //     console.log("hi!");
+						    // });
+						    $('.rsvp-button').click(function() {
+								try {
+									var event_id = $(this).attr('data');
+
+									console.log(event_id);
+
+									var ev = Events.findOne(event_id);
+									console.log(ev);
+									if (ev.host != Meteor.user()._id && $.inArray(event_id, Meteor.user().attending) == -1) {
+										$('#rsvp-notice').text("You're going!");
+										$(event.target).closest('ul').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
+										Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": event_id}});
+										Events.update(ev._id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
+										console.log(Meteor.user().profile);
+									}
+								} catch (err) {
+									console.log("we have an error", err);
+								}
+							});
+						});
+
 						infowindow.open(GoogleMaps.maps.CampusMap.instance, marker); //TODO images only load on 2nd click?
 						if ($('#' + marker.id + ' .attending li').length < 1) {
 							var event = Events.findOne(marker.id);
@@ -182,28 +209,34 @@ Template.home.onCreated(function() {
 		});
 	});
 });
+console.log("herero");
 Template.home.events({
-	'click .rsvp-button': function(event) {
-		console.log(event.target);
+	// 'click .rsvp-button': function(event) {
+		// event.preventDefault();
+		// console.log(event.target);
+		// try {
+		// 	var event_id = $(event.target).attr('data');
 
+			
 
-		var event_id = $(event.target).attr('data');
+		// 	console.log(event_id);
 
-		
-
-		console.log(event_id);
-
-		var ev = Events.findOne(event_id);
-		console.log(ev);
-		if (ev.host != Meteor.user()._id && $.inArray(event_id, Meteor.user().attending) == -1) {
-			$('#rsvp-notice').text("You're going!");
-			$(event.target).closest('ul').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
-			Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": event_id}});
-			Events.update(ev._id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
-			console.log(Meteor.user().profile);
-		}
-	}
+		// 	var ev = Events.findOne(event_id);
+		// 	console.log(ev);
+		// 	if (ev.host != Meteor.user()._id && $.inArray(event_id, Meteor.user().attending) == -1) {
+		// 		$('#rsvp-notice').text("You're going!");
+		// 		$(event.target).closest('ul').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
+		// 		Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": event_id}});
+		// 		Events.update(ev._id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
+		// 		console.log(Meteor.user().profile);
+		// 	}
+		// } catch (err) {
+		// 	console.log("we have an error", err);
+		// }
+		// console.log('hi');
+	// }
 });
+
 
 Template.CreateEventModal.helpers({
 	getCoordinates: function() {
