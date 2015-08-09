@@ -1,3 +1,8 @@
+Session.setDefault("social-markers", []);
+Session.setDefault("exchange-markers", []);
+Session.setDefault("study-markers", []);
+Session.setDefault("food-markers", []);
+Session.setDefault("sports-markers", []);
 var that = this
 
 var eventLat;
@@ -9,6 +14,17 @@ var shape = {
 }
 
 var loc;
+
+function filterQuery() {
+	query = {
+		'$and' : [
+			{'time' : {'$gt' : Date.now() - (1000 * 60 * 20)}},
+			{'category' : {'$nin' : Session.get("filter")}}
+		]
+	};
+	console.log(query);
+	return query;
+}
 
 var rad = function(x) {
   return x * Math.PI / 180;
@@ -57,10 +73,9 @@ Template.home.onCreated(function() {
 		var events = {};
 		var infowindow;
 
-		Events.find({time: {$gt : Date.now() - (1000 * 60 * 60)}}).observe({
+		Events.find({'time' : {'$gt' : Date.now() - (1000 * 60 * 20)}}).observe({
 		// Events.find({time: {$gt : Date.now() - (10)}}).observe({
 			added: function(document) {
-				console.log(that.filters[document.category])
 				if(!that.filters[document.category])
 					return
 
@@ -131,6 +146,12 @@ Template.home.onCreated(function() {
 				);
 
 				events[document._id] = marker;
+				// TODO filter
+				// var temp = Session.get(document.category + '-markers');
+				// temp.push(marker);
+				// console.log(temp);
+				// Session.set(document.category + '-markers',temp);
+				// console.log(Session.get(document.category + '-markers'));
 			},
 			changed: function(newDocument, oldDocument) {
 				events[newDocument._id].setPosition({lat: newDocument.lat, lng: newDocument.lng});
