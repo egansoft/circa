@@ -39,7 +39,11 @@ var getDistance = function(lat1, lng1, lat2, lng2) {
     Math.sin(dLong / 2) * Math.sin(dLong / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
-  return Math.floor(d); // returns the distance in meter
+  var feet = 3.28084 * d;
+  if (feet < 528)
+    return Math.round(feet) + ' feet'
+  else
+    return (feet/5280).toFixed(1) + ' miles'
 };
 
 Template.home.helpers({
@@ -100,7 +104,7 @@ Template.home.onCreated(function() {
 						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
 						      '<div id=' + marker.id + '>'+
 						      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
-						      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
+						      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' away</p>' +
 						      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
 						      '<ul class="attending"></ul>' +
 						      '<p id="rsvp-notice"></p>'+
