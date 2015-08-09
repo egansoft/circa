@@ -1,13 +1,10 @@
 <template name="home">
+    {{> navbar}}
 
-  <div class="container">
-    <div class="jumbotron">
-      <h1>TFTI</h1>
-          {{> loginButtons}}
-          <p>Maps be here</p>
-          <div class="map-container">
+
+    <div class="container-fluid fucka">
+        <div class="map-container">
             {{> googleMap name="CampusMap" options=CampusMapOptions}}
-          </div>
-      </div>
+        </div>
     </div>
 </template>
