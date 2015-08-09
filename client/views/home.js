@@ -3,6 +3,22 @@ var that = this
 var eventLat;
 var eventLng;
 
+var rad = function(x) {
+  return x * Math.PI / 180;
+};
+
+var getDistance = function(lat1, lng1, lat2, lng2) {
+  var R = 6378137; // Earth’s mean radius in meter
+  var dLat = rad(lat2 - lat1);
+  var dLong = rad(lng2 - lng1);
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(lat1)) * Math.cos(lat2) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d; // returns the distance in meter
+};
+
 Template.home.helpers({
   CampusMapOptions: function() {
     var loc = Geolocation.latLng()
@@ -18,6 +34,10 @@ Template.home.helpers({
 
 Template.home.onCreated(function() {
 	GoogleMaps.ready("CampusMap", function(map) {
+		var marker = new google.maps.Marker({
+	      position: map.options.center,
+	      map: map.instance
+	    });
 		google.maps.event.addListener(map.instance, 'dblclick',
 			function(event) {
 				console.log(event);
