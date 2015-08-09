@@ -141,10 +141,19 @@ Template.home.onCreated(function() {
     							    // });
 									var event = Events.findOne(marker.id);
         							event.attending.forEach(function(entry) {
+        								// if (entry[0] != Meteor.user().services.facebook.id)
         								$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
                                             "<img src=http://graph.facebook.com/" + entry[0] +
                                             "/picture/?type=small class=\"img-responsive\"></div></li>");
         							});
+        							if ($.inArray(marker.id, Meteor.user().profile.attending) != -1) {
+        								console.log('hide');
+        								console.log(marker.id);
+        								$('.rsvp-button').hide();
+        							} else {
+        								console.log('show');
+        								$('.rsvp-button').show();
+        							}
     							    $('.rsvp-button').click(function() {
     									try {
     										var event_id = $(this).attr('data');
@@ -266,7 +275,10 @@ Template.CreateEventModal.events({
 			category: eventCategory,
 			attending: [[Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]],
 			host: Meteor.user()._id
+		}, function(err, doc) {
+			Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": doc}});	
 		});
+		
 		Modal.hide('CreateEventModal');
 		$('#create-form').trigger('reset');
 	},
