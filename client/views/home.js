@@ -39,7 +39,11 @@ var getDistance = function(lat1, lng1, lat2, lng2) {
     Math.sin(dLong / 2) * Math.sin(dLong / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
-  return Math.floor(d); // returns the distance in meter
+  var feet = 3.28084 * d;
+  if (feet < 528)
+    return Math.round(feet) + ' feet'
+  else
+    return (feet/5280).toFixed(1) + ' miles'
 };
 
 Template.home.helpers({
