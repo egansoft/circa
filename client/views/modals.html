@@ -103,9 +103,39 @@
 </template>
 
 <template name="category">
-	<option>Social</option>
-	<option>Study</option>
-	<option>Exchange</option>
-	<option>Food</option>
-	<option>Sports</option>
+	{{#each categories}}
+        <option value="{{this.name}}">{{this.display}}</option>
+    {{/each}}
+</template>
+
+<template name="filterChecks">
+    {{#each categories}}
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="{{this.name}}" class="filterCheck" {{getChecked category=this.name }} />
+                <img src="{{this.icon}}" /> {{this.display}}
+            </label>
+        </div>
+    {{/each}}
+</template>
+
+<template name="filterModal">
+  <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Filter Events</h4>
+        </div>
+        <div class="modal-body">
+          <form id="filter-events">
+            {{> filterChecks}}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" form="filter-form" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
