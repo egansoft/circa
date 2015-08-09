@@ -45,7 +45,7 @@ Template.home.onCreated(function() {
 	      position: map.options.center,
 	      map: map.instance
 	    });
-		google.maps.event.addListener(map.instance, 'dblclick',
+		google.maps.event.addListener(map.instance, 'click',
 			function(event) {
 				console.log(event);
 				eventLat = event.latLng.lat();
