@@ -99,7 +99,8 @@ Template.CreateEventModal.events({
 			startTime: eventStartTime,
 			endTime: eventEndTime,
 			capacity: eventCapacity,
-			category: eventCategory
+			category: eventCategory,
+			host: Meteor.user()._id
 		});
 		Modal.hide('CreateEventModal');
 		$('#create-form').trigger('reset');
