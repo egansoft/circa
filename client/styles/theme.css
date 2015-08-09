@@ -10,7 +10,9 @@ body {
   background: none;
  
 }
-
+form {
+  color: #000;
+}
 
 .container {
   width: 960px;
@@ -57,4 +59,11 @@ button {
   .container{
     width: 100%;
   }
+}
+
+/*Event Modal Styling*/
+.tme-picker form-control {
+  display: inline-block;
+  width: 50%;
+  float: left;
 }

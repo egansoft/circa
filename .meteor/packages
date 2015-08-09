@@ -8,3 +8,5 @@ accounts-facebook
 mdg:geolocation
 accounts-ui
 dburles:google-maps
+peppelg:bootstrap-3-modal
+tsega:bootstrap3-datetimepicker
