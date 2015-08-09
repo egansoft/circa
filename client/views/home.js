@@ -18,7 +18,7 @@ var loc;
 function filterQuery() {
 	query = {
 		'$and' : [
-			{'time' : {'$gt' : Date.now() - (1000 * 60 * 20)}},
+			{'time' : {'$gt' : Date.now() - (1000 * 60 * 60)}},
 			{'category' : {'$nin' : Session.get("filter")}}
 		]
 	};
@@ -139,6 +139,12 @@ Template.home.onCreated(function() {
     							    //     e.stop();
     							    //     console.log("hi!");
     							    // });
+									var event = Events.findOne(marker.id);
+        							event.attending.forEach(function(entry) {
+        								$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
+                                            "<img src=http://graph.facebook.com/" + entry[0] +
+                                            "/picture/?type=small class=\"img-responsive\"></div></li>");
+        							});
     							    $('.rsvp-button').click(function() {
     									try {
     										var event_id = $(this).attr('data');
@@ -149,7 +155,7 @@ Template.home.onCreated(function() {
     										console.log(ev);
     										if (ev.host != Meteor.user()._id && $.inArray(event_id, Meteor.user().attending) == -1) {
     											$('#rsvp-notice').text("You're going!");
-    											$(event.target).closest('ul').append("<li><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small></li>");
+    											$(this).parent().find('ul').append("<li><div class=\"dankness\"><img src=http://graph.facebook.com/" + Meteor.user().services.facebook.id + "/picture/?type=small class=\"img-responsive\"></div></li>");
     											Meteor.users.update(Meteor.user()._id, {$addToSet: {"profile.attending": event_id}});
     											Events.update(ev._id, {$addToSet: {attending: [Meteor.user().services.facebook.id, Meteor.user().services.facebook.name]}});
     											console.log(Meteor.user().profile);
@@ -162,14 +168,14 @@ Template.home.onCreated(function() {
                                 marker.info = infowindow;
                                 marker.opened = true;
         						marker.info.open(GoogleMaps.maps.CampusMap.instance, marker); //TODO images only load on 2nd click?
-        						if ($('#' + marker.id + ' .attending li').length < 1) {
-        							var event = Events.findOne(marker.id);
-        							event.attending.forEach(function(entry) {
-        								$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
-                                            "<img src=http://graph.facebook.com/" + entry[0] +
-                                            "/picture/?type=small class=\"img-responsive\"></div></li>");
-        							});
-        						}
+        						// if ($('#' + marker.id + ' .attending li').length < 1) {
+        						// 	var event = Events.findOne(marker.id);
+        						// 	event.attending.forEach(function(entry) {
+        						// 		$('#' + marker.id + ' .attending').append("<li><div class=\"dankness\">" +
+              //                               "<img src=http://graph.facebook.com/" + entry[0] +
+              //                               "/picture/?type=small class=\"img-responsive\"></div></li>");
+        						// 	});
+        						// }
                             }
     					}
     				);
