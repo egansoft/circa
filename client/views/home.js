@@ -126,7 +126,7 @@ Template.home.onCreated(function() {
 		        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
 		        						      '<div id=' + marker.id + '>'+
 		        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
-		        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
+		        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' away</p>' +
 		        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
 		        							      '<ul class="attending"></ul>' +
 		        							      '<p id="rsvp-notice"></p>'+
