@@ -120,20 +120,38 @@ Template.home.onCreated(function() {
                                 marker.info.close();
                                 marker.opened = false;
                             } else {
-        						infowindow = new google.maps.InfoWindow({
-        							content: '<div class="content">'+
-        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
-        						      '<div id=' + marker.id + '>'+
-        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
-        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
-        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
-        							      '<ul class="attending"></ul>' +
-        							      '<p id="rsvp-notice"></p>'+
-        							      '<button data=' + marker.id + ' type="button" class="btn btn-primary rsvp-button">Let\'s Go!</button>' +
-        						      '</div>'+
-        						      '</div>',
-                                     disableAutoPan: true
-        						});
+                            	if ($.inArray(marker.id, Meteor.user().profile.attending) != -1) {
+										infowindow = new google.maps.InfoWindow({
+		        							content: '<div class="content">'+
+		        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
+		        						      '<div id=' + marker.id + '>'+
+		        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
+		        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
+		        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
+		        							      '<ul class="attending"></ul>' +
+		        							      '<p id="rsvp-notice"></p>'+
+		        						      '</div>'+
+		        						      '</div>',
+		                                     disableAutoPan: true	
+		        						});
+        							} else {
+        								infowindow = new google.maps.InfoWindow({
+		        							content: '<div class="content">'+
+		        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
+		        						      '<div id=' + marker.id + '>'+
+		        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
+		        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
+		        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
+		        							      '<ul class="attending"></ul>' +
+		        							      '<p id="rsvp-notice"></p>'+
+		        							      '<button data=' + marker.id + ' type="button" class="btn btn-primary rsvp-button">Let\'s Go!</button>' +
+		        						      '</div>'+
+		        						      '</div>',
+		                                     disableAutoPan: true
+		        						});
+        							}
+        						
+
         						google.maps.event.addListener(infowindow, 'domready', function() {
     							    // document.id("map-form").addEvent("submit", function(e) {
     							    //     e.stop();
@@ -146,14 +164,7 @@ Template.home.onCreated(function() {
                                             "<img src=http://graph.facebook.com/" + entry[0] +
                                             "/picture/?type=small class=\"img-responsive\"></div></li>");
         							});
-        							if ($.inArray(marker.id, Meteor.user().profile.attending) != -1) {
-        								console.log('hide');
-        								console.log(marker.id);
-        								$('.rsvp-button').hide();
-        							} else {
-        								console.log('show');
-        								$('.rsvp-button').show();
-        							}
+        							
     							    $('.rsvp-button').click(function() {
     									try {
     										var event_id = $(this).attr('data');
@@ -176,6 +187,7 @@ Template.home.onCreated(function() {
     							});
                                 marker.info = infowindow;
                                 marker.opened = true;
+                                
         						marker.info.open(GoogleMaps.maps.CampusMap.instance, marker); //TODO images only load on 2nd click?
         						// if ($('#' + marker.id + ' .attending li').length < 1) {
         						// 	var event = Events.findOne(marker.id);
@@ -227,9 +239,9 @@ Template.home.onCreated(function() {
     			},
     			changed: function(newDocument, oldDocument) {
     				events[newDocument._id].setPosition({lat: newDocument.lat, lng: newDocument.lng});
-    				var attendees = $('#' + newDocument._id +' .event-capacity-info-window').text();
-    				attendees = parseInt(attendees, 10) + 1;
-    				$('#' + newDocument._id +' .event-capacity-info-window').text(attendees.toString());
+    				// var attendees = $('#' + newDocument._id +' .event-capacity-info-window').text();
+    				// attendees = parseInt(attendees, 10) + 1;
+    				$('#' + newDocument._id +' .event-capacity-info-window').text(newDocument.attending.length);
     				if (newDocument.host == Meteor.user()._id) {
     					var newMember = newDocument.attending[newDocument.attending.length-1]
                         var img = '<img src="http://graph.facebook.com/' + newMember[0] + '/picture/?type=small" /> '
