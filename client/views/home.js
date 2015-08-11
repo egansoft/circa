@@ -48,16 +48,18 @@ var getDistance = function(lat1, lng1, lat2, lng2) {
 
 var tooLong = new ReactiveVar(false)
 var altLoc
-Meteor.setTimeout(function() {
-	if(!loc)
-		console.log('too long bruh')
-	var alt = JSON.parse(geoip.keys.location)
-	altLoc = {
-		lat: alt.latitude,
-		lng: alt.longitude
-	}
-	tooLong.set(true)
-}, 5000)
+Template.home.rendered = function() {
+	Meteor.setTimeout(function() {
+		if(!loc)
+			console.log('too long bruh')
+		var alt = JSON.parse(geoip.keys.location)
+		altLoc = {
+			lat: alt.latitude,
+			lng: alt.longitude
+		}
+		tooLong.set(true)
+	}, 5000)
+}
 
 Template.home.helpers({
   CampusMapOptions: function() {
