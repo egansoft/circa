@@ -25,7 +25,7 @@ Template.filterChecks.events({
 
 Template.eventList.helpers({
     events: function() {
-        var events = Events.find().fetch()
+        var events = Events.find({}, {sort: {startTime:-1}}).fetch()
         return _.filter(events, function(event) {
             return _.find(event.attending, function(person) {
                 return person[0] == Meteor.user().services.facebook.id
@@ -60,8 +60,7 @@ Template.eventList.helpers({
 
 Template.eventList.events({
     'click .dank': function(a) {
-        console.log(a)
-        console.log($(a.target).attr('data-name'), $(a.target).attr('data-event'))
         Events.update($(a.target).attr('data-event'), {'$push': {emoji: $(a.target).attr('data-name')}})
     }
 })
+

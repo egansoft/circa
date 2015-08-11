@@ -66,12 +66,18 @@ button {
   }
 }
 
-.navbar-text {
+.navbar-brand {
     margin-bottom: 0;
+	padding-bottom:0;
+}
+
+.navbar-brand:hover, .navbar-brand:focus {
+	color: #9d9d9d !important;
 }
 
 .fuck {
     margin-left:15px;
+	margin-bottom:0
 }
 
 .fucka {
