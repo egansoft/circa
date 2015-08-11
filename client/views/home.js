@@ -93,6 +93,7 @@ Template.home.onCreated(function() {
             }).observe({
     		// Events.find({time: {$gt : Date.now() - (10)}}).observe({
     			added: function(document) {
+                    console.log("logs working!");
     				if(!that.filters[document.category])
     					return
 
@@ -115,7 +116,7 @@ Template.home.onCreated(function() {
     				// google.maps.event.addListener(marker, 'dragend', function(event) {
     				// 	Events.update(marker.id, {$set : {lat: event.latLng.lat(), lng: event.latLng.lng()}});
     				// });
-
+                    
     				google.maps.event.addListener(marker, DeviceListeners['open'],
     					function(){
                             if (marker.opened) {
@@ -124,7 +125,8 @@ Template.home.onCreated(function() {
                                 prevMarker = null;
                             } else {
 
-                                if (typeof prevMarker !== 'undefined'){
+                                if (typeof prevMarker !== 'undefined' && prevMarker !==null){
+                                    console.log("prevMarker exists!");
                                     prevMarker.info.close();
                                     prevMarker.opened = false;
                                     prevMarker = null;
