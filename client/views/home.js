@@ -46,10 +46,30 @@ var getDistance = function(lat1, lng1, lat2, lng2) {
     return (feet/5280).toFixed(1) + ' miles'
 };
 
+var tooLong = new ReactiveVar(false)
+var altLoc
+Meteor.setTimeout(function() {
+	if(!loc)
+		console.log('too long bruh')
+	var alt = JSON.parse(geoip.keys.location)
+	altLoc = {
+		lat: alt.latitude,
+		lng: alt.longitude
+	}
+	tooLong.set(true)
+}, 5000)
+
 Template.home.helpers({
   CampusMapOptions: function() {
     loc = Geolocation.latLng()
-  	if (GoogleMaps.loaded() && loc) {
+  	if (GoogleMaps.loaded() && (loc || tooLong.get())) {
+		if(!loc && tooLong) {
+			return {
+				center: new google.maps.LatLng(altLoc.lat, altLoc.lng),
+				zoom: 11
+			}
+		}
+
   		return {
   			center: new google.maps.LatLng(loc.lat, loc.lng),
   			zoom: 15
