@@ -76,7 +76,8 @@ Template.home.onCreated(function() {
 		);
 
 		var events = {};
-		var infowindow;
+		var infowindow = new google.maps.InfoWindow();
+        var prevMarker;
 
         template.autorun(function() {
             _.each(events, function(value, key) {
@@ -109,6 +110,7 @@ Template.home.onCreated(function() {
                     // set object value for toggling
                     marker.opened = false;
                     marker.info = {};
+                    infowindow.info = {};
 
     				// google.maps.event.addListener(marker, 'dragend', function(event) {
     				// 	Events.update(marker.id, {$set : {lat: event.latLng.lat(), lng: event.latLng.lng()}});
@@ -119,15 +121,23 @@ Template.home.onCreated(function() {
                             if (marker.opened) {
                                 marker.info.close();
                                 marker.opened = false;
+                                prevMarker = null;
                             } else {
+
+                                if (typeof prevMarker !== 'undefined'){
+                                    prevMarker.info.close();
+                                    prevMarker.opened = false;
+                                    prevMarker = null;
+                                }
+
                             	if ($.inArray(marker.id, Meteor.user().profile.attending) != -1) {
 										infowindow = new google.maps.InfoWindow({
 		        							content: '<div class="content">'+
-		        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
+		        						      '<h4 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h4>'+
 		        						      '<div id=' + marker.id + '>'+
 		        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
 		        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' away</p>' +
-		        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
+		        							      '<p class = "event-capacity-info-window"><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
 		        							      '<ul class="attending"></ul>' +
 		        							      '<p id="rsvp-notice"></p>'+
 		        						      '</div>'+
@@ -137,11 +147,11 @@ Template.home.onCreated(function() {
         							} else {
         								infowindow = new google.maps.InfoWindow({
 		        							content: '<div class="content">'+
-		        						      '<h1 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h1>'+
+		        						      '<h4 class="eventHeading">' + document.name + ' &mdash; ' + that.categories.display(document.category) + '</h4>'+
 		        						      '<div id=' + marker.id + '>'+
 		        							      '<p class="event-time-info-window"><strong>' + moment(document.startTime).fromNow() + '</strong></p>' +
 		        							      '<p class="event-time-info-window">' + getDistance(loc.lat, loc.lng, document.lat, document.lng) +' meters away</p>' +
-		        							      '<p><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
+		        							      '<p class = "event-capacity-info-window"><span class="event-capacity-info-window">'  + document.attending.length + '</span> people attending</p>' +
 		        							      '<ul class="attending"></ul>' +
 		        							      '<p id="rsvp-notice"></p>'+
 		        							      '<button data=' + marker.id + ' type="button" class="btn btn-primary rsvp-button">Let\'s Go!</button>' +
@@ -187,6 +197,7 @@ Template.home.onCreated(function() {
     							});
                                 marker.info = infowindow;
                                 marker.opened = true;
+                                prevMarker = marker;
 
         						marker.info.open(GoogleMaps.maps.CampusMap.instance, marker); //TODO images only load on 2nd click?
         						// if ($('#' + marker.id + ' .attending li').length < 1) {
