@@ -66,6 +66,7 @@ Template.home.helpers({
     loc = Geolocation.latLng()
   	if (GoogleMaps.loaded() && (loc || tooLong.get())) {
 		if(!loc && tooLong) {
+			loc = altLoc
 			return {
 				center: new google.maps.LatLng(altLoc.lat, altLoc.lng),
 				zoom: 11
